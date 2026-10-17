@@ -9,3 +9,8 @@ target/
 *.iws
 *.iml
 *.ipr
+
+# H2 database files
+*.mv.db
+*.trace.db
+*.lock.db
