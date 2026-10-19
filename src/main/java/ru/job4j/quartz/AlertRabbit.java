@@ -17,7 +17,10 @@ public class AlertRabbit {
             int interval = Integer.parseInt(loadProperties().getProperty("rabbit.interval"));
             Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
             scheduler.start();
-            JobDetail job = newJob(Rabbit.class).build();
+            JobDetail job = newJob(Rabbit.class)
+                    .usingJobData("param1", "Hello, Rabbit!")
+                    .usingJobData("param2", 42)
+                    .build();
             SimpleScheduleBuilder times = simpleSchedule()
                     .withIntervalInSeconds(interval)
                     .repeatForever();
@@ -34,7 +37,10 @@ public class AlertRabbit {
     public static class Rabbit implements Job {
         @Override
         public void execute(JobExecutionContext context) {
-            System.out.println("Rabbit runs here ...");
+            String param1 = context.getJobDetail().getJobDataMap().getString("param1");
+            int param2 = context.getJobDetail().getJobDataMap().getInt("param2");
+            System.out.printf(
+                    "Rabbit runs here with param1: %s, and param2: %d\n", param1, param2);
         }
     }
 
