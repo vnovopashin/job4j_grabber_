@@ -1,7 +1,7 @@
 CREATE TABLE post (
     id SERIAL PRIMARY KEY,
-    name TEXT,
-    text TEXT,
+    title TEXT,
     link TEXT UNIQUE,
-    created TIMESTAMP WITHOUT TIME ZONE
+    description TEXT,
+    time TIMESTAMPTZ
 );
