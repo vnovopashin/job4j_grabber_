@@ -3,5 +3,5 @@ CREATE TABLE post (
     title TEXT,
     link TEXT UNIQUE,
     description TEXT,
-    time TIMESTAMPTZ
+    time TIMESTAMP WITH TIME ZONE
 );
