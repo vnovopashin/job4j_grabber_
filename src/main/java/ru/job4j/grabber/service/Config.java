@@ -15,10 +15,14 @@ public class Config {
     private final Properties properties = new Properties();
 
     public void load(String file) {
-        try (InputStream input = Config.class.getClassLoader().getResourceAsStream(file)) {
+        InputStream input = Config.class.getClassLoader().getResourceAsStream(file);
+        if (input == null) {
+            throw new IllegalStateException(file + " not found");
+        }
+        try (input) {
             properties.load(input);
         } catch (IOException io) {
-            LOG.error(String.format("When load file : %s", file), io);
+            LOG.error("When load file : " + file, io);
         }
     }
 

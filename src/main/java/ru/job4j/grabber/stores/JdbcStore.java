@@ -18,7 +18,9 @@ public class JdbcStore implements Store {
 
     @Override
     public void save(Post post) {
-        String sql = "INSERT INTO post(title, link, description, time) VALUES (?, ?, ?, ?)";
+        String sql = """
+                INSERT INTO post(title, link, description, time)
+                                VALUES (?, ?, ?, ?) ON CONFLICT DO NOTHING""";
         try (PreparedStatement statement =
                      connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, post.getTitle());

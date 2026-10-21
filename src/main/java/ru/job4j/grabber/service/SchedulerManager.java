@@ -25,7 +25,7 @@ public class SchedulerManager implements AutoCloseable {
         }
     }
 
-    public void load(int period, Class<SuperJobGrab> task, Store store) {
+    public void load(int period, Class<? extends Job> task, Store store) {
         try {
             var data = new JobDataMap();
             data.put("store", store);
