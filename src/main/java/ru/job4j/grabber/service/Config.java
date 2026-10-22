@@ -22,7 +22,7 @@ public class Config {
         try (input) {
             properties.load(input);
         } catch (IOException io) {
-            LOG.error("When load file : " + file, io);
+            throw new IllegalStateException("Не удалось прочитать " + file, io);
         }
     }
 
