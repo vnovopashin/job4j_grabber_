@@ -17,7 +17,7 @@ public class SuperJobGrab implements Job {
     public void execute(JobExecutionContext context) throws JobExecutionException {
         var store = (Store) context.getJobDetail().getJobDataMap().get("store");
         for (var post : store.getAll()) {
-            LOG.info(post.getTitle());
+            LOG.info(post.getId() + " — " + post.getTitle());
         }
     }
 }
