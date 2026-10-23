@@ -41,7 +41,8 @@ public class HabrCareerParse implements Parse {
             var dateElement = row.select(".basic-date").first();
             var titleLink = row.select(".vacancy-card__title-link").first();
             if (dateElement == null || titleLink == null) {
-                LOG.warn("Пропускаю карточку без даты или ссылки: " + row.text());
+                String href = row.select(".vacancy-card__backdrop-link").attr("href");
+                LOG.warn("Пропускаю карточку без даты или ссылки: href=" + href);
                 return;
             }
             String dateTime = dateElement.attr("datetime");
