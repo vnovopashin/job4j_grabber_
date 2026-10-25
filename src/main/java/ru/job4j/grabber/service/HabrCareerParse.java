@@ -16,20 +16,36 @@ public class HabrCareerParse implements Parse {
     private static final String SOURCE_LINK = "https://career.habr.com";
     private static final String PREFIX = "/vacancies?page=";
     private static final String SUFFIX = "&q=Java%20developer&type=all";
+    private static final int PAGE_COUNT = 5;
 
     @Override
     public List<Post> fetch() {
         var result = new ArrayList<Post>();
-        try {
-            int pageNumber = 1;
+        for (int pageNumber = 1; pageNumber <= PAGE_COUNT; pageNumber++) {
+            if (pageNumber > 1) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    LOG.warn("Прервано во время паузы между страницами");
+                    break;
+                }
+            }
             String fullLink = "%s%s%d%s".formatted(SOURCE_LINK, PREFIX, pageNumber, SUFFIX);
-            var document = Jsoup.connect(fullLink)
-                    .userAgent("Mozilla/5.0")
-                    .timeout(10000)
-                    .get();
-            result.addAll(parse(document));
-        } catch (IOException e) {
-            LOG.error("When load page", e);
+            try {
+                var document = Jsoup.connect(fullLink)
+                        .userAgent("Mozilla/5.0")
+                        .timeout(10_000)
+                        .get();
+                List<Post> pagePosts = parse(document);
+                if (pagePosts.isEmpty()) {
+                    LOG.info("Страница " + pageNumber + " пустая — останавливаемся");
+                    break;
+                }
+                result.addAll(pagePosts);
+            } catch (IOException e) {
+                LOG.error("Не удалось загрузить страницу " + pageNumber, e);
+            }
         }
         return result;
     }
