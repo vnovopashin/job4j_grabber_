@@ -49,6 +49,45 @@ class HabrCareerParseTest {
                             "https://career.habr.com/vacancies/1000168359",
                             "https://career.habr.com/vacancies/1000168906"
                     );
+
+            assertThat(posts)
+                    .extracting(Post::getDescription)
+                    .as("parse(Document) не заполняет description — это делает fetch()")
+                    .containsOnlyNulls();
         }
+    }
+
+    @Test
+    void whenExtractDescriptionFromFixtureThenReturnsText() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/habr_vacancy_page.html")) {
+            assertThat(in).as("фикстура habr_vacancy_page.html не найдена").isNotNull();
+            Document doc = Jsoup.parse(in, StandardCharsets.UTF_8.name(), "https://career.habr.com");
+
+            String description = new HabrCareerParse().extractDescription(doc);
+
+            assertThat(description)
+                    .as("описание должно быть извлечено")
+                    .isNotNull()
+                    .isNotBlank()
+                    .contains("О компании и команде")
+                    .contains("Java")
+                    .contains("Условия работы")
+                    .doesNotContain("Описание вакансии");
+        }
+    }
+
+    @Test
+    void whenNoDescriptionBlockThenReturnsNull() {
+        Document doc = Jsoup.parse("<html><body><div>нет описания</div></body></html>");
+
+        assertThat(new HabrCareerParse().extractDescription(doc)).isNull();
+    }
+
+    @Test
+    void whenDescriptionBlockIsEmptyThenReturnsNull() {
+        Document doc = Jsoup.parse(
+                "<html><body><div class=\"vacancy-description__text\">   </div></body></html>");
+
+        assertThat(new HabrCareerParse().extractDescription(doc)).isNull();
     }
 }
