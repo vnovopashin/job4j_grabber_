@@ -42,6 +42,16 @@ public class HabrCareerParse implements Parse {
                     LOG.info("Страница " + pageNumber + " пустая — останавливаемся");
                     break;
                 }
+                for (Post post : pagePosts) {
+                    post.setDescription(retrieveDescription(post.getLink()));
+                    try {
+                        Thread.sleep(300);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        LOG.warn("Прервано во время паузы между описаниями");
+                        return result;
+                    }
+                }
                 result.addAll(pagePosts);
             } catch (IOException e) {
                 LOG.error("Не удалось загрузить страницу " + pageNumber, e);
@@ -78,6 +88,37 @@ public class HabrCareerParse implements Parse {
             result.add(post);
         });
         return result;
+    }
+
+    private String retrieveDescription(String link) {
+        if (link == null || link.isBlank()) {
+            return null;
+        }
+        try {
+            Document doc = Jsoup.connect(link)
+                    .userAgent("Mozilla/5.0")
+                    .timeout(10_000)
+                    .get();
+            return extractDescription(doc);
+        } catch (IOException e) {
+            LOG.error("Не удалось загрузить страницу вакансии: " + link, e);
+            return null;
+        }
+    }
+
+    /**
+     * Извлекает текст описания вакансии из уже загруженного Document.
+     * Не делает сетевых запросов — тестируется на фикстуре.
+     *
+     * @return текст описания или null, если блока нет
+     */
+    String extractDescription(Document document) {
+        var descriptionBlock = document.selectFirst(".vacancy-description__text");
+        if (descriptionBlock == null) {
+            return null;
+        }
+        String text = descriptionBlock.text();
+        return text.isBlank() ? null : text;
     }
 
     public static void main(String[] args) {
