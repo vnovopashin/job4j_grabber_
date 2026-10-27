@@ -4,9 +4,12 @@ import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import ru.job4j.grabber.model.Post;
+import ru.job4j.grabber.utils.DateTimeParser;
+import ru.job4j.grabber.utils.HabrCareerDateTimeParser;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +20,12 @@ public class HabrCareerParse implements Parse {
     private static final String PREFIX = "/vacancies?page=";
     private static final String SUFFIX = "&q=Java%20developer&type=all";
     private static final int PAGE_COUNT = 5;
+
+    private final DateTimeParser dateTimeParser;
+
+    public HabrCareerParse(DateTimeParser dateTimeParser) {
+        this.dateTimeParser = dateTimeParser;
+    }
 
     @Override
     public List<Post> fetch() {
@@ -76,7 +85,7 @@ public class HabrCareerParse implements Parse {
             String link = String.format("%s%s", SOURCE_LINK, titleLink.attr("href"));
             Long time = null;
             try {
-                time = Instant.parse(dateTime).toEpochMilli();
+                time = dateTimeParser.parse(dateTime).toEpochSecond(ZoneOffset.UTC);
             } catch (DateTimeParseException e) {
                 LOG.warn(String.format("Не смог распарсить дату '%s' для вакансии '%s'",
                         dateTime, vacancyName));
@@ -122,7 +131,8 @@ public class HabrCareerParse implements Parse {
     }
 
     public static void main(String[] args) {
-        HabrCareerParse parse = new HabrCareerParse();
+        HabrCareerDateTimeParser dateTimeParser = new HabrCareerDateTimeParser();
+        HabrCareerParse parse = new HabrCareerParse(dateTimeParser);
         List<Post> posts = parse.fetch();
         for (Post post : posts) {
             System.out.println(post);

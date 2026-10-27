@@ -1,6 +1,7 @@
 package ru.job4j.grabber.service;
 
 import org.apache.log4j.Logger;
+import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -9,6 +10,8 @@ import ru.job4j.grabber.stores.Store;
 /**
  * Класс описывающий парсер - SuperJobGrab
  */
+
+@DisallowConcurrentExecution
 public class SuperJobGrab implements Job {
 
     private static final Logger LOG = Logger.getLogger(SuperJobGrab.class);
