@@ -11,6 +11,10 @@ public class Post {
     private String title;
     private String link;
     private String description;
+    /**
+     * Время публикации поста в epoch seconds (UTC).
+     * Может быть null, если время неизвестно.
+     */
     private Long time;
 
     public Long getId() {
@@ -59,12 +63,12 @@ public class Post {
             return false;
         }
         Post post = (Post) o;
-        return Objects.equals(id, post.id) && Objects.equals(title, post.title) && Objects.equals(link, post.link) && Objects.equals(time, post.time);
+        return Objects.equals(id, post.id) && Objects.equals(title, post.title) && Objects.equals(link, post.link) && Objects.equals(description, post.description) && Objects.equals(time, post.time);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, link, time);
+        return Objects.hash(id, title, link, description, time);
     }
 
     @Override

@@ -27,7 +27,7 @@ public class JdbcStore implements Store {
             statement.setString(2, post.getLink());
             statement.setString(3, post.getDescription());
             if (post.getTime() != null) {
-                statement.setObject(4, Instant.ofEpochMilli(post.getTime()));
+                statement.setObject(4, Instant.ofEpochSecond(post.getTime()));
             } else {
                 statement.setNull(4, Types.TIMESTAMP_WITH_TIMEZONE);
             }
@@ -78,7 +78,7 @@ public class JdbcStore implements Store {
         post.setDescription(rs.getString("description"));
         OffsetDateTime odt = rs.getObject("time", OffsetDateTime.class);
         Instant time = odt != null ? odt.toInstant() : null;
-        post.setTime(time == null ? null : time.toEpochMilli());
+        post.setTime(time == null ? null : time.getEpochSecond());
         return post;
     }
 }
