@@ -8,7 +8,13 @@ import org.quartz.JobExecutionException;
 import ru.job4j.grabber.stores.Store;
 
 /**
- * Класс описывающий парсер - SuperJobGrab
+ * Класс SuperJobGrab реализует интерфейс Job (из Quartz)
+ * и отвечает за выполнение задачи парсинга.
+ * Поле:
+ * parse: Parse — объект, реализующий логику парсинга.
+ * Метод:
+ * execute(JobExecutionContext context): void — выполняет задачу парсинга
+ * и сохраняет данные через хранилище (Store).
  */
 
 @DisallowConcurrentExecution
