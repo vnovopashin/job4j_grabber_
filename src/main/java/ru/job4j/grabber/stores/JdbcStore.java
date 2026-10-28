@@ -9,6 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Класс JdbcStore реализует интерфейс Store для хранения данных в базе PostgreSQL.
+ * Поле connection: Connection используется для взаимодействия с базой.
+ * Методы:
+ * save(Post post): void — сохраняет вакансию в базе данных.
+ * getAll(): List<Post> — извлекает все вакансии из базы.
+ * findById(Long id): Optional<Post> — находит вакансию по идентификатору.
+ */
 public class JdbcStore implements Store {
     private final Connection connection;
 

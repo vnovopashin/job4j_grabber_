@@ -8,12 +8,20 @@ import ru.job4j.grabber.utils.DateTimeParser;
 import ru.job4j.grabber.utils.HabrCareerDateTimeParser;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Класс HabrCareerParse реализует интерфейс Parse.
+ * Используется для парсинга вакансий с платформы career.habr.com.
+ * Поля:
+ * SOURCE_LINK: String — базовая ссылка на сайт.
+ * PREFIX: String — префикс для ссылок на страницы с вакансиями.
+ * SUFFIX: String — параметры для фильтрации вакансий.
+ * Метод fetch() загружает и обрабатывает HTML-страницы, извлекая данные о вакансиях.
+ */
 public class HabrCareerParse implements Parse {
     private static final Logger LOG = Logger.getLogger(HabrCareerParse.class);
     private static final String SOURCE_LINK = "https://career.habr.com";

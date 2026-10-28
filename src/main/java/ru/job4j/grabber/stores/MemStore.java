@@ -6,7 +6,12 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * Реализация MemStore
+ * Класс MemStore реализует интерфейс Store и предоставляет хранилище в памяти.
+ * Использует коллекцию mem: Map<Long, Post> для хранения объектов.
+ * Реализованные методы:
+ * save(Post post): void — добавляет вакансию в коллекцию.
+ * getAll(): List<Post> — возвращает список всех вакансий.
+ * findById(Long id): Optional<Post> — находит вакансию по идентификатору в коллекции.
  */
 public class MemStore implements Store {
     private final Map<Long, Post> mem = new HashMap<>();

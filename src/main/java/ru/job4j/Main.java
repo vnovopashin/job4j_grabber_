@@ -11,7 +11,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
- * Точка входа
+ * Класс Main является точкой входа в приложение.
+ * Основной метод:
+ * main(String[] args): void — настраивает приложение,
+ * запускает парсинг вакансий и сохраняет их в хранилище.
  */
 public class Main {
     private static final Logger LOG = Logger.getLogger(Main.class);

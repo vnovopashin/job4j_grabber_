@@ -10,7 +10,13 @@ import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;
 
 /**
- * Класс выполняет задачи по расписанию.
+ * Класс SchedulerManager управляет задачами парсинга через библиотеку Quartz.
+ * Поля:
+ * scheduler: Scheduler — объект для управления расписанием задач.
+ * Методы:
+ * init(): void — инициализирует планировщик.
+ * load(int period, Class<SuperJobGrab> task, Store store): void — создает и запускает задачу с указанным интервалом.
+ * close(): void — завершает работу планировщика.
  */
 public class SchedulerManager implements AutoCloseable {
     private static final Logger LOG = Logger.getLogger(SchedulerManager.class);
