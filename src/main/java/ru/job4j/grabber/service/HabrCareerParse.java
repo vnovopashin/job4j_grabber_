@@ -5,7 +5,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import ru.job4j.grabber.model.Post;
 import ru.job4j.grabber.utils.DateTimeParser;
-import ru.job4j.grabber.utils.HabrCareerDateTimeParser;
 
 import java.io.IOException;
 import java.time.ZoneOffset;
@@ -136,14 +135,5 @@ public class HabrCareerParse implements Parse {
         }
         String text = descriptionBlock.text();
         return text.isBlank() ? null : text;
-    }
-
-    public static void main(String[] args) {
-        HabrCareerDateTimeParser dateTimeParser = new HabrCareerDateTimeParser();
-        HabrCareerParse parse = new HabrCareerParse(dateTimeParser);
-        List<Post> posts = parse.fetch();
-        for (Post post : posts) {
-            System.out.println(post);
-        }
     }
 }
