@@ -5,6 +5,7 @@ import ru.job4j.grabber.model.Post;
 import java.sql.*;
 import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +36,9 @@ public class JdbcStore implements Store {
             statement.setString(2, post.getLink());
             statement.setString(3, post.getDescription());
             if (post.getTime() != null) {
-                statement.setObject(4, Instant.ofEpochSecond(post.getTime()));
+                OffsetDateTime odt = Instant.ofEpochSecond(post.getTime())
+                        .atOffset(ZoneOffset.UTC);
+                statement.setObject(4, odt);
             } else {
                 statement.setNull(4, Types.TIMESTAMP_WITH_TIMEZONE);
             }
